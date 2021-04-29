@@ -43,8 +43,8 @@ const nextArrow = document.querySelector(".next-month-button");
 nextArrow.addEventListener("click", () => {
   const parsedDate = parse(currentMonth.innerText, "LLLL - yyyy", new Date());
   const nextMonth = getNextMonth(parsedDate);
+  setCurrentMonth(nextMonth); // run this function before rendering calendar days so that the if condition in line 134 can extract the the current month and correctly tag the out of the day months
   calendarDaysContainer.innerHTML = renderDates(nextMonth);
-  setCurrentMonth(nextMonth);
 });
 
 /* What happens when I click on the left arrow? */
@@ -52,8 +52,8 @@ const prevArrow = document.querySelector(".prev-month-button");
 prevArrow.addEventListener("click", () => {
   const parsedDate = parse(currentMonth.innerText, "LLLL - yyyy", new Date());
   const prevMonth = getPreviousMonth(parsedDate);
-  calendarDaysContainer.innerHTML = renderDates(prevMonth);
   setCurrentMonth(prevMonth);
+  calendarDaysContainer.innerHTML = renderDates(prevMonth);
 });
 
 /* What happens when I select a date in the calendar? */
@@ -131,8 +131,9 @@ function renderDates(date) {
         new Date()
       );
       dateButt.classList.add("date");
-      if (getMonth(date) !== getMonth(parsedDate))
+      if (getMonth(date) !== getMonth(parsedDate)) {
         dateButt.classList.add("date-picker-other-month-date");
+      }
       dateButt.dataset.date = format(date, "LLLL do, yyyy");
       dateButt.innerText = format(date, "d");
       return dateButt.outerHTML;
