@@ -18,7 +18,7 @@ const calendarDaysContainer = document.querySelector(".date-picker-grid-dates");
 
 // Show or hide the modal when the button is clicked
 dateButton.addEventListener("click", showHideDateModal);
-function showHideDateModal(e) {
+function showHideDateModal() {
   const dateModal = document.querySelector(".date-picker");
   dateModal.classList.toggle("show");
 }
@@ -33,10 +33,13 @@ setCurrentMonth(today);
 calendarDaysContainer.innerHTML = renderDates(today);
 
 // When modal is open, the date on the button needs to also be selected on calendar
-const initiallySelectedDate = document.querySelector(
-  `[data-date="${dateButton.innerText}"]`
-);
-initiallySelectedDate.classList.add("selected");
+function highlightSelectedDate() {
+  const initiallySelectedDate = document.querySelector(
+    `[data-date="${dateButton.innerText}"]`
+  );
+  initiallySelectedDate.classList.add("selected");
+}
+highlightSelectedDate();
 
 /* What happens when I click on the right arrow? */
 const nextArrow = document.querySelector(".next-month-button");
@@ -45,6 +48,7 @@ nextArrow.addEventListener("click", () => {
   const nextMonth = getNextMonth(parsedDate);
   setCurrentMonth(nextMonth); // run this function before rendering calendar days so that the if condition in line 134 can extract the the current month and correctly tag the out of the day months
   calendarDaysContainer.innerHTML = renderDates(nextMonth);
+  highlightSelectedDate();
 });
 
 /* What happens when I click on the left arrow? */
@@ -54,6 +58,7 @@ prevArrow.addEventListener("click", () => {
   const prevMonth = getPreviousMonth(parsedDate);
   setCurrentMonth(prevMonth);
   calendarDaysContainer.innerHTML = renderDates(prevMonth);
+  highlightSelectedDate();
 });
 
 /* What happens when I select a date in the calendar? */
@@ -70,6 +75,7 @@ calendarDaysContainer.addEventListener("click", (e) => {
     new Date()
   );
   setButtonDate(selectedDate);
+  showHideDateModal();
 });
 
 // Set date of the button
